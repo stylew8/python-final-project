@@ -10,15 +10,15 @@ export default function Main() {
         <main className="landing-page">
             <h1>Prašome prisijungti prie paskyros</h1>
             <section>
-                <a className="student-log" href="#">
+                <a className="student-log" href="/login">
                     <img src={studentImg} alt="Logo" />
                     <h2>Studentas</h2>
                 </a>
-                <a className="teacher-log"  href="#">
+                <a className="teacher-log"  href="/login">
                     <img src={teacherImg} alt="Logo" />
                     <h2>Mokytojas</h2>
                 </a>
-                <a className="admin-log"  href="#">
+                <a className="admin-log"  href="/login">
                     <img src={adminImg} alt="Logo" />
                     <h2>Administratorius</h2>
                 </a>
