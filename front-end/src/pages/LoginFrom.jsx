@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { apiNoAuth } from "../api"
 
 const LoginForm = ({ userType }) => {
     
@@ -9,23 +10,20 @@ const LoginForm = ({ userType }) => {
         setLoading(true); 
 
         try {
-            var role = userType;
-
-            const response = await fetch("http://localhost:8000/login/" + userType, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, password, role }),
+            
+            const response = await apiNoAuth(`/login/${userType}`, "POST", {
+                username,
+                password,
+                role: userType,
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                const { token } = data;
-                localStorage.setItem("jwt", token); 
-                console.log("Login successful:", token);
-                // Например, window.location.href = "/dashboard";
+                const { access_token } = data;
+                localStorage.setItem("jwt", access_token); 
+                console.log("Login successful:", access_token);
+                window.location.href = "/";
             } else {
                 setError("Neteisingas vardas arba slaptažodis");
             }
