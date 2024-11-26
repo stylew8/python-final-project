@@ -31,7 +31,7 @@ export default function Main() {
                         <h2>Studentas</h2> 
                     </div>
                     <div className="back" onClick={handleFormClick}>
-                        <LoginForm />
+                        <LoginForm userType="user" />
                     </div>
                 </div>
                 <div
@@ -43,7 +43,7 @@ export default function Main() {
                         <h2>Mokytojas</h2>
                     </div>
                     <div className="back" onClick={handleFormClick}>
-                        <LoginForm />
+                        <LoginForm userType="teacher" />
                     </div>
                 </div>
                 <div
@@ -55,7 +55,7 @@ export default function Main() {
                         <h2>Administratorius</h2>
                     </div>
                     <div className="back" onClick={handleFormClick}>
-                        <LoginForm />
+                        <LoginForm userType="admin" />
                     </div>
                 </div>
             </section>
