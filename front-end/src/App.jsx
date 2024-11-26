@@ -5,6 +5,9 @@ import Main from './pages/Main.jsx'
 import Footer from './pages/Footer.jsx';
 import Header from './pages/Header.jsx';
 import NotFound404 from './pages/NotFound404.jsx'
+import 'bootstrap/dist/css/bootstrap.css';
+import '@popperjs/core/dist/cjs/popper.js';
+import '../src/styles/site.css'
 
 function App() {
   return (

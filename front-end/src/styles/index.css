@@ -1,0 +1,43 @@
+.landing-page{
+    gap: 100px;
+    min-height: 100vh;
+}
+
+.landing-page section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.landing-page img{
+    width: 200px;
+    height: 200px;
+}
+
+section a{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    text-decoration: none;
+    border: 2.5px solid limegreen;
+    padding: 35px;
+    background-color: #404040;
+    border-radius: 30px;
+    box-shadow: 0 4px 20px -2px #1a1a1a inset;
+    transition: 0.2s all ease;
+}
+
+section a h2{
+    position: absolute;
+    bottom: 1px;
+    font-size: 1.1rem;
+    color: aliceblue;
+}
+
+section a:hover{
+    box-shadow: none;
+    background-color: #333;
+}
