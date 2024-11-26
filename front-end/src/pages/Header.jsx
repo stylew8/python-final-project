@@ -5,7 +5,7 @@ function Header() {
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">TAMO KLONAS</a>
+        <a className="navbar-brand" href="/">AIS</a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon" />
         </button>
@@ -24,14 +24,14 @@ function Header() {
               <a className="nav-link " href="#">Įvertinimai</a>
             </li>
           </ul> */}
-          <form className="d-flex">
+          {/* <form className="d-flex">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item" id='authorization'>
                 <a className="nav-link" href="/login">Prisijungimas</a>
                 <a className="nav-link" href="/register">Registracija</a>
               </li>
             </ul>
-          </form>
+          </form> */}
         </div>
       </div>
     </nav>

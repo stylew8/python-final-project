@@ -6,7 +6,6 @@ import Footer from './pages/Footer.jsx';
 import Header from './pages/Header.jsx';
 
 import LoginForm from './pages/LoginFrom.jsx';
-import RegistrationFrom from './pages/RegistrationFrom.jsx';
 
 import NotFound404 from './pages/NotFound404.jsx'
 import 'bootstrap/dist/css/bootstrap.css';
@@ -19,7 +18,6 @@ function App() {
       <Header />
       <Routes>
         <Route path='/login' element={<LoginForm />} />
-        <Route path='/register' element={<RegistrationFrom />} />
         <Route path='/' element={<Main />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>

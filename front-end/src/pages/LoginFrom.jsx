@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import '../styles/loginForm.css'
 
 export default function LoginForm() {
     const [userType, setUserType] = useState("");
@@ -14,21 +13,6 @@ export default function LoginForm() {
         <main>
             <form onSubmit={handleSubmit} className="p-4 m-5 login-form">
                 <h2 className="text-center mb-4">Prisijungimas</h2>
-
-                <div className="mb-3">
-                    <label htmlFor="userType" className="form-label">Asmens tipas</label>
-                    <select
-                        id="userType"
-                        className="form-select text-dark"
-                        value={userType}
-                        onChange={(e) => setUserType(e.target.value)}
-                        required
-                    >
-                        <option className="text-dark" value="student">Studentas</option>
-                        <option className="text-dark" value="teacher">Mokytojas</option>
-                        <option className="text-dark" value="admin">Administratorius</option>
-                    </select>
-                </div>
 
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Vardas</label>

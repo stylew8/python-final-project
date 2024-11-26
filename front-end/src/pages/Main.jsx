@@ -1,27 +1,63 @@
-import React from "react";
-import '../styles/index.css'
+import React, { useState } from "react";
+import "../styles/index.css";
 
-import studentImg from '../images/student.png';
-import teacherImg from '../images/teacher.png';
-import adminImg from '../images/whiteboard.png';
+import studentImg from "../images/student.png";
+import teacherImg from "../images/teacher.png";
+import adminImg from "../images/whiteboard.png";
+import LoginForm from "../pages/LoginFrom";
 
 export default function Main() {
+    const [flippedCard, setFlippedCard] = useState(null);
+
+    const handleFlip = (cardType) => {
+        setFlippedCard(flippedCard === cardType ? null : cardType);
+    };
+
+    const handleFormClick = (event) => {
+        // Prevent flip when clicking inside the form
+        event.stopPropagation();
+    };
+
     return (
         <main className="landing-page">
             <h1>Prašome prisijungti prie paskyros</h1>
             <section>
-                <a className="student-log" href="/login">
-                    <img src={studentImg} alt="Logo" />
-                    <h2>Studentas</h2>
-                </a>
-                <a className="teacher-log"  href="/login">
-                    <img src={teacherImg} alt="Logo" />
-                    <h2>Mokytojas</h2>
-                </a>
-                <a className="admin-log"  href="/login">
-                    <img src={adminImg} alt="Logo" />
-                    <h2>Administratorius</h2>
-                </a>
+                <div
+                    className={`card ${flippedCard === "student" ? "flipped" : ""}`}
+                    onClick={() => handleFlip("student")}
+                >
+                    <div className="front">
+                        <img src={studentImg} alt="Student" />
+                        <h2>Studentas</h2> 
+                    </div>
+                    <div className="back" onClick={handleFormClick}>
+                        <LoginForm />
+                    </div>
+                </div>
+                <div
+                    className={`card ${flippedCard === "teacher" ? "flipped" : ""}`}
+                    onClick={() => handleFlip("teacher")}
+                >
+                    <div className="front">
+                        <img src={teacherImg} alt="Teacher" />
+                        <h2>Mokytojas</h2>
+                    </div>
+                    <div className="back" onClick={handleFormClick}>
+                        <LoginForm />
+                    </div>
+                </div>
+                <div
+                    className={`card ${flippedCard === "admin" ? "flipped" : ""}`}
+                    onClick={() => handleFlip("admin")}
+                >
+                    <div className="front">
+                        <img src={adminImg} alt="Admin" />
+                        <h2>Administratorius</h2>
+                    </div>
+                    <div className="back" onClick={handleFormClick}>
+                        <LoginForm />
+                    </div>
+                </div>
             </section>
         </main>
     );
