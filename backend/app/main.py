@@ -3,5 +3,4 @@ from .views import api_router
 
 app = FastAPI()
 
-# Регистрация маршрутов (view functions)
 app.include_router(api_router)
