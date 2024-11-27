@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from app.views.auth_views import router as auth_router
 from app.views.user_views import router as user_router
 from app.views.teacher_views import router as teacher_router
-# from app.views.task_views import router as task_router
+from app.views.task_views import router as task_router
 from app.views.admin_views import router as admin_router
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,4 +28,4 @@ app.include_router(user_router)
 app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(teacher_router)
-# app.include_router(task_router)
+app.include_router(task_router)

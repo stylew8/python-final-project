@@ -7,14 +7,20 @@ export const checkAuth = async () => {
     if(!token)
         return false;
 
-    var response = await apiAuth("/verify-token");
-  
-    if(response.ok){
-        return true;
-    }
-    else{
-        localStorage.removeItem("jwt");
-        return false;
+
+    try {
+        var response = await apiAuth("/verify-token");
+      
+        if(response.ok){
+            return true;
+        }
+        else{
+            localStorage.removeItem("jwt");
+            return false;
+        }
+        
+    } catch (error) {
+        console.error("Authentication error:", error);
     }
   };
   
