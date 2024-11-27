@@ -1,8 +1,15 @@
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.models import Base,Admin,User,Teacher,Subject,Class
+from models import Base, Semester, StudyPlan, StudyProgram
 from dotenv import load_dotenv
+
+from models import Admin, Student, Teacher, Group, Subject, Base
+
+
 
 # Загружаем переменные окружения из .env
 load_dotenv()
@@ -17,58 +24,102 @@ engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 db = SessionLocal()
 
-# Функция для инициализации базы данных
-# Функция для инициализации базы данных
+
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+
+hashed_password = pwd_context.hash("123")
+
+
 def init_db():
-    # Создание всех таблиц в базе данных
+    # Создаём все таблицы
     Base.metadata.create_all(bind=engine)
 
-    # Проверим, есть ли уже данные в таблицах
-    if not db.query(Subject).first():
-        # Добавление предметов
-        subjects = [
-            Subject(name="Математика"),
-            Subject(name="Литовский"),
-            Subject(name="Информатика")
-        ]
-        db.add_all(subjects)
-        db.commit()
+    # Фиксированные данные для хэширования паролей
+    Salt = "73LP05Z853OX568H0ZMRG78Y"
+    password = "123"
+    hashedPassword = pwd_context.hash(password + Salt)
 
-    if not db.query(Class).first():
-        # Добавление классов
-        class_1A = Class(name="1A")
-        db.add(class_1A)
-        db.commit()
+    # Добавляем фейковую учебную программу
+    fake_study_program = StudyProgram(
+        name="Fake Study Program",
+        description="This is a placeholder study program."
+    )
+    db.add(fake_study_program)
+    db.commit()
 
-    if not db.query(Teacher).first():
-        # Создание учителей и установка связи с классом
-        class_1A = db.query(Class).filter_by(name="1A").first()  # Получаем класс
-        teacher1 = Teacher(username="teacher1", email="teacher1@example.com", hashed_password="hashed_password_teacher")
-        class_1A.teacher = teacher1  # Устанавливаем связь между классом и учителем
-        db.add(teacher1)
-        db.commit()
+    # Добавляем фейковую группу, привязанную к учебной программе
+    fake_group = Group(
+        name="Fake Group",
+        study_program_id=fake_study_program.id
+    )
+    db.add(fake_group)
+    db.commit()
 
-    if not db.query(User).first():
-        # Добавление студентов
-        student1 = User(username="student1", email="student1@example.com", hashed_password="hashed_password_student")
-        student2 = User(username="student2", email="student2@example.com", hashed_password="hashed_password_student")
-        db.add(student1)
-        db.add(student2)
-        db.commit()
+    # Добавляем фейковый учебный план, привязанный к учебной программе
+    fake_study_plan = StudyPlan(
+        name="Fake Study Plan",
+        program_id=fake_study_program.id
+    )
+    db.add(fake_study_plan)
+    db.commit()
 
-        # Привязка студентов к классу
-        class_1A.students.append(student1)
-        class_1A.students.append(student2)
-        db.commit()
+    # Добавляем фейковый семестр, привязанный к учебному плану
+    fake_semester = Semester(
+        name="Fake Semester",
+        start_date="2024-01-01",
+        end_date="2024-06-01",
+        study_plan_id=fake_study_plan.id
+    )
+    db.add(fake_semester)
+    db.commit()
 
-    if not db.query(Admin).first():
-        admin1 = Admin(username="adm", email="exmpl@gmail.com", hashed_password="hashed_password")
+    # Добавляем фейковый предмет, привязанный к группе и семестру
+    fake_subject = Subject(
+        name="Fake Subject",
+        description="This is a placeholder subject.",
+        group_id=fake_group.id,
+        semester_id=fake_semester.id
+    )
+    db.add(fake_subject)
+    db.commit()
 
-        db.add(admin1)
-        db.commit()
+    # Добавляем администратора
+    admin = Admin(
+        username="admin",
+        hashed_password=hashedPassword,
+        salt=Salt
+    )
+    db.add(admin)
+    db.commit()
 
+    # Добавляем студента, привязанного к группе
+    student = Student(
+        username="student",
+        hashed_password=hashedPassword,
+        salt=Salt,
+        first_name="John",
+        last_name="Doe",
+        group_id=fake_group.id
+    )
+    db.add(student)
+    db.commit()
 
-    print("База данных успешно инициализирована!")
+    # Добавляем учителя, привязанного к предмету
+    teacher = Teacher(
+        username="teacher",
+        hashed_password=hashedPassword,
+        salt=Salt,
+        first_name="Jane",
+        last_name="Smith",
+        subject_id=fake_subject.id
+    )
+    db.add(teacher)
+    db.commit()
+
+    print("База данных успешно инициализирована с фейковыми данными!")
+
 
 
 # Запуск инициализации базы данных

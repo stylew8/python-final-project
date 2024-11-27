@@ -7,7 +7,6 @@ from pydantic import BaseModel
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app.models import User
 import os
 from dotenv import load_dotenv
 

@@ -43,8 +43,6 @@ function App() {
         <Route path='/login' element={<LoginForm />} />
         <Route path='/semestersDetails' element={<SemestersDetails />} />
         <Route path='/semesters' element={<Semesters />} />
-        <Route path='/' element={<Main />} />
-
         <Route
           path="/"
           element={isAuthenticated ? <Semesters /> : <Main />}

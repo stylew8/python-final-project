@@ -30,7 +30,7 @@ def register_user(user: AdminCreate, db: Session = Depends(get_db)):
 @router.post("/login/admin", response_model=Token)
 def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(Admin).filter(Admin.username == form_data.username).first()
-    if not user or not verify_password(form_data.password, user.hashed_password):
+    if not user or not verify_password(form_data.password+user.salt, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid username or password")
     
     access_token = create_access_token(data={"sub": user.username}, role="admin", user_id=user.id)
