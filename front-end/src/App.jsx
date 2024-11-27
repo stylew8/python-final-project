@@ -1,4 +1,9 @@
+
+import React, { useEffect, useState } from "react";
+import logo from './logo.svg';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { checkAuth } from "./utils/auth";
 import './App.css';
 import Main from './pages/Main.jsx'
 import Footer from './pages/Footer.jsx';
@@ -14,14 +19,36 @@ import '@popperjs/core/dist/cjs/popper.js';
 import '../src/styles/site.css'
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    const verifyAuth = async () => {
+      const authStatus = await checkAuth();
+      setIsAuthenticated(authStatus);
+    };
+
+    verifyAuth();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
+    // CIA NOJAU PRIDEK LOADING PUSLAPI KZKOKI
+  }
+
   return (
     <BrowserRouter>
       <Header />
       <Routes>
+
         <Route path='/login' element={<LoginForm />} />
         <Route path='/semestersDetails' element={<SemestersDetails />} />
         <Route path='/semesters' element={<Semesters />} />
         <Route path='/' element={<Main />} />
+
+        <Route
+          path="/"
+          element={isAuthenticated ? <Semesters /> : <Main />}
+        />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
       <Footer />

@@ -1,13 +1,45 @@
 import React, { useState } from "react";
+import { apiNoAuth } from "../api"
 
-export default function LoginForm() {
-    const [userType, setUserType] = useState("");
+const LoginForm = ({ userType }) => {
+    
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Handle login logic here
-        console.log("Login submitted for user type:", userType);
+        setError(""); 
+        setLoading(true); 
+
+        try {
+            
+            const response = await apiNoAuth(`/login/${userType}`, "POST", {
+                username,
+                password,
+                role: userType,
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const { access_token } = data;
+                localStorage.setItem("jwt", access_token); 
+                console.log("Login successful:", access_token);
+                window.location.href = "/";
+            } else {
+                setError("Neteisingas vardas arba slaptažodis");
+            }
+        } catch (err) {
+            console.error("Login error:", err);
+            setError("Klaida prisijungiant prie serverio");
+        } finally {
+            setLoading(false); 
+        }
     };
+
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     return (
         <main>
@@ -22,6 +54,8 @@ export default function LoginForm() {
                         id="username"
                         placeholder="Įveskite vardą"
                         required
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                 </div>
 
@@ -33,12 +67,19 @@ export default function LoginForm() {
                         id="password"
                         placeholder="Įveskite slaptažodį"
                         required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
 
-                <button type="submit" className="btn btn-secondary w-100">Prisijungti</button>
+                {error && <div className="alert alert-danger">{error}</div>}
+
+                <button type="submit" className="btn btn-secondary w-100" disabled={loading}>
+                    {loading ? "Prašome palaukti..." : "Prisijungti"}
+                </button>
             </form>
         </main>
-
     );
 }
+
+export default LoginForm;

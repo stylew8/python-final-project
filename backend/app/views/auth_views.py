@@ -1,7 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
 from app.auth import SECRET_KEY, ALGORITHM, oauth2_scheme
-from backend.app.schemas.token_schema import Token
 import jwt
 
 router = APIRouter()
