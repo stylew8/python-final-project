@@ -1,10 +1,7 @@
-
 import React, { useEffect, useState } from "react";
-import logo from './logo.svg';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { checkAuth } from "./utils/auth";
-import './App.css';
 import Main from './pages/Main.jsx'
 import Footer from './pages/Footer.jsx';
 import Header from './pages/Header.jsx';
@@ -31,8 +28,11 @@ function App() {
   }, []);
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-    // CIA NOJAU PRIDEK LOADING PUSLAPI KZKOKI
+    return (
+      <main>
+        <div>Loading...</div>
+      </main>
+    );
   }
 
   return (
