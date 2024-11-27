@@ -28,7 +28,7 @@ export default function Main() {
                 >
                     <div className="front">
                         <img src={studentImg} alt="Student" />
-                        <h2>Studentas</h2> 
+                        <h2>Studentas</h2>
                     </div>
                     <div className="back" onClick={handleFormClick}>
                         <LoginForm />
