@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { checkAuth } from "./utils/auth";
+
 import Main from './pages/Main.jsx'
 import Footer from './pages/Footer.jsx';
 import Header from './pages/Header.jsx';
-
 import LoginForm from './pages/LoginFrom.jsx';
 import Semesters from './pages/Semesters.jsx';
 import SemestersDetails from './pages/SemestersDetails.jsx';
-
+import StudentView from './pages/StudentView.jsx';
+import StudentSubjectDetailed from './pages/StudentSubjectDetailed.jsx';
 import NotFound404 from './pages/NotFound404.jsx'
+
 import 'bootstrap/dist/css/bootstrap.css';
 import '@popperjs/core/dist/cjs/popper.js';
 import '../src/styles/site.css'
@@ -39,10 +40,11 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-
         <Route path='/login' element={<LoginForm />} />
         <Route path='/semestersDetails' element={<SemestersDetails />} />
         <Route path='/semesters' element={<Semesters />} />
+        <Route path='/studentView' element={<StudentView />} />
+        <Route path="/studentSubjectDetailed" element={<StudentSubjectDetailed />} />
         <Route
           path="/"
           element={isAuthenticated ? <Semesters /> : <Main />}
