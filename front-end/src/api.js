@@ -32,14 +32,13 @@ export const apiAuth = async (endpoint, method = "GET", data = null) => {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8000";
 
     const headers = {
-        "Content-Type": "application/json",  // изменяем на JSON, если отправляем JSON
+        "Content-Type": "application/json", 
     };
 
     const token = localStorage.getItem("jwt");
 
     if (token) {
         headers["Authorization"] = `Bearer ${token}`;
-        console.log("Authorization header:", headers["Authorization"]);  // Логирование заголовков
     }
 
     let body = null;

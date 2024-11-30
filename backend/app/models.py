@@ -32,8 +32,20 @@ class Teacher(Person):
     __tablename__ = "teachers"
     first_name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=False)
-    subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
-    subject = relationship("Subject", back_populates="teacher")
+    subjects = relationship("Subject", back_populates="teacher")
+
+class Subject(Base):
+    __tablename__ = "subjects"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
+    group = relationship("Group", back_populates="subjects")
+    semester_id = Column(Integer, ForeignKey("semesters.id"), nullable=False)
+    semester = relationship("Semester", back_populates="subjects")
+    grade_types = relationship("GradeType", back_populates="subject")  # Связь с GradeType
+    teacher = relationship("Teacher", back_populates="subjects", uselist=False)
+    teacher_id = Column(Integer, ForeignKey("teachers.id"), nullable=True)
 
 # Groups Table
 class Group(Base):
@@ -73,28 +85,27 @@ class StudyPlanSubject(Base):
     subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
 
 # Subjects Table
-class Subject(Base):
-    __tablename__ = "subjects"
-    id = Column(Integer, primary_key=True)
-    name = Column(String(255), nullable=False)
-    description = Column(Text, nullable=True)
-    group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
-    group = relationship("Group", back_populates="subjects")
-    semester_id = Column(Integer, ForeignKey("semesters.id"), nullable=False)
-    semester = relationship("Semester", back_populates="subjects")
-    grades = relationship("Grade", back_populates="subject")
-    teacher = relationship("Teacher", back_populates="subject", uselist=False)
 
-# Grades Table
+
+class GradeType(Base):
+    __tablename__ = "grade_types"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255), nullable=False)  # Например, "PD", "KN", "EG"
+    description = Column(Text, nullable=True)  # Описание типа оценки
+    percentage = Column(Float, nullable=False)  # Процент влияния на итоговый балл
+    subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)  # Связь с предметом
+    subject = relationship("Subject", back_populates="grade_types")
+    grades = relationship("Grade", back_populates="grade_type")
+
+# Оценки
 class Grade(Base):
     __tablename__ = "grades"
     id = Column(Integer, primary_key=True)
-    grade_type = Column(String(255), nullable=False)  # PD, KN, EG
-    value = Column(Float, nullable=False)
-    subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
-    student_id = Column(Integer, ForeignKey("students.id"), nullable=False)
-    final_grade = Column(Float, nullable=True)  # Optional final grade
-    subject = relationship("Subject", back_populates="grades")
+    value = Column(Float, nullable=False)  # Значение оценки
+    grade_type_id = Column(Integer, ForeignKey("grade_types.id"), nullable=False)  # Связь с GradeType
+    student_id = Column(Integer, ForeignKey("students.id"), nullable=False)  # Связь со студентом
+    final_grade = Column(Float, nullable=True)  # Итоговая оценка (если есть)
+    grade_type = relationship("GradeType", back_populates="grades")
     student = relationship("Student", back_populates="grades")
 
 # Semesters Table

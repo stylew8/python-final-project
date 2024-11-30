@@ -1,127 +1,139 @@
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, Semester, StudyPlan, StudyProgram
+from models import Base, Semester, StudyPlan, StudyProgram, Admin, Student, Teacher, Group, Subject, GradeType, Grade
 from dotenv import load_dotenv
+from passlib.context import CryptContext
 
-from models import Admin, Student, Teacher, Group, Subject, Base
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
-
-
-# Загружаем переменные окружения из .env
+# Загрузка переменных окружения
 load_dotenv()
 
-# Строка подключения из .env
+# Настройка подключения к базе данных
 DATABASE_URL = os.getenv("DATABASE_URL")
-
-# Создаем движок SQLAlchemy
 engine = create_engine(DATABASE_URL, echo=True)
-
-# Сессия для работы с базой данных
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 db = SessionLocal()
 
-
-from passlib.context import CryptContext
-
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
-hashed_password = pwd_context.hash("123")
-
+def hash_password(password: str, salt: str) -> str:
+    """Хэширование пароля с солью."""
+    return pwd_context.hash(password + salt)
 
 def init_db():
-    # Создаём все таблицы
+    """Инициализация базы данных."""
+    # Создание таблиц
     Base.metadata.create_all(bind=engine)
 
-    # Фиксированные данные для хэширования паролей
-    Salt = "73LP05Z853OX568H0ZMRG78Y"
+    # Хэшированный пароль
+    salt = "73LP05Z853OX568H0ZMRG78Y"
     password = "123"
-    hashedPassword = pwd_context.hash(password + Salt)
+    hashed_password = hash_password(password, salt)
 
-    # Добавляем фейковую учебную программу
-    fake_study_program = StudyProgram(
-        name="Fake Study Program",
-        description="This is a placeholder study program."
+    # Создание учебной программы
+    study_program = StudyProgram(
+        name="Computer Science",
+        description="Program for computer science students."
     )
-    db.add(fake_study_program)
+    db.add(study_program)
     db.commit()
 
-    # Добавляем фейковую группу, привязанную к учебной программе
-    fake_group = Group(
-        name="Fake Group",
-        study_program_id=fake_study_program.id
+    # Создание группы
+    group = Group(
+        name="CS-101",
+        study_program_id=study_program.id
     )
-    db.add(fake_group)
+    db.add(group)
     db.commit()
 
-    # Добавляем фейковый учебный план, привязанный к учебной программе
-    fake_study_plan = StudyPlan(
-        name="Fake Study Plan",
-        program_id=fake_study_program.id
+    # Создание учебного плана
+    study_plan = StudyPlan(
+        name="CS Basic Plan",
+        program_id=study_program.id
     )
-    db.add(fake_study_plan)
+    db.add(study_plan)
     db.commit()
 
-    # Добавляем фейковый семестр, привязанный к учебному плану
-    fake_semester = Semester(
-        name="Fake Semester",
+    # Создание семестра
+    semester = Semester(
+        name="Spring 2024",
         start_date="2024-01-01",
         end_date="2024-06-01",
-        study_plan_id=fake_study_plan.id
+        study_plan_id=study_plan.id
     )
-    db.add(fake_semester)
+    db.add(semester)
     db.commit()
 
-    # Добавляем фейковый предмет, привязанный к группе и семестру
-    fake_subject = Subject(
-        name="Fake Subject",
-        description="This is a placeholder subject.",
-        group_id=fake_group.id,
-        semester_id=fake_semester.id
+    # Создание предмета
+    subject = Subject(
+        name="Introduction to Programming",
+        description="Basic programming course.",
+        group_id=group.id,
+        semester_id=semester.id,
+        teacher_id=None
     )
-    db.add(fake_subject)
+    db.add(subject)
     db.commit()
 
-    # Добавляем администратора
-    admin = Admin(
-        username="admin",
-        hashed_password=hashedPassword,
-        salt=Salt
-    )
-    db.add(admin)
+    # Создание типов оценок
+    grade_types = [
+        GradeType(name="PD", description="Практическое задание", percentage=20.0, subject_id=subject.id),
+        GradeType(name="KN", description="Контрольная работа", percentage=30.0, subject_id=subject.id),
+        GradeType(name="EG", description="Экзамен", percentage=50.0, subject_id=subject.id)
+    ]
+    db.add_all(grade_types)
     db.commit()
 
-    # Добавляем студента, привязанного к группе
+    # Создание студента
     student = Student(
         username="student",
-        hashed_password=hashedPassword,
-        salt=Salt,
+        hashed_password=hashed_password,
+        salt=salt,
         first_name="John",
         last_name="Doe",
-        group_id=fake_group.id
+        group_id=group.id
     )
     db.add(student)
     db.commit()
 
-    # Добавляем учителя, привязанного к предмету
+    # Создание оценок
+    grades = [
+        Grade(value=9.0, grade_type_id=grade_types[0].id, student_id=student.id),
+        Grade(value=8.5, grade_type_id=grade_types[1].id, student_id=student.id),
+        Grade(value=10.0, grade_type_id=grade_types[2].id, student_id=student.id)
+    ]
+    db.add_all(grades)
+    db.commit()
+
+    # Создание администратора
+    admin = Admin(
+        username="admin",
+        hashed_password=hashed_password,
+        salt=salt
+    )
+    db.add(admin)
+    db.commit()
+
+    # Создание учителя
     teacher = Teacher(
         username="teacher",
-        hashed_password=hashedPassword,
-        salt=Salt,
+        hashed_password=hashed_password,
+        salt=salt,
         first_name="Jane",
-        last_name="Smith",
-        subject_id=fake_subject.id
+        last_name="Smith"
     )
     db.add(teacher)
     db.commit()
 
-    print("База данных успешно инициализирована с фейковыми данными!")
+    # Назначение учителя предмету
+    subject.teacher_id = teacher.id
+    db.commit()
 
+    print("База данных успешно инициализирована!")
 
-
-# Запуск инициализации базы данных
+# Запуск скрипта
 if __name__ == "__main__":
     init_db()

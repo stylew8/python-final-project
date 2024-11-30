@@ -7,6 +7,14 @@
     font-family: Arial, sans-serif;
   }
   
+  .no-data-message {
+    text-align: center;
+    font-size: 18px;
+    color: #999;
+    margin: 20px 0;
+  }
+  
+
   .student-view-card {
     border: 2px solid lime;
     border-radius: 8px;

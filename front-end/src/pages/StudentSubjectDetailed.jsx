@@ -1,47 +1,91 @@
-import React from 'react';
-import '../styles/studentSubjectDetailed.css';
+import React, { useEffect, useState } from "react";
+import "../styles/studentSubjectDetailed.css";
+import { useParams } from "react-router-dom";
+import { apiAuth } from "../api";
 
-const StudentSubjectDetailed = ({ subject }) => {
-  // Normally, we'd fetch this data based on the subject ID
-  // For this example, we'll use mock data
-  const subjectData = {
-    code: "P175B162",
-    name: "Programavimo kalba Python",
-    credits: 6,
-    hours: 160,
-    lecturer: "Jonas Jonaitis",
-    finalGrade: null,
-    tasks: [
-      { name: "Laboratorinis darbas 1", weight: 10, grade: 9 },
-      { name: "Laboratorinis darbas 2", weight: 10, grade: null },
-      { name: "Laboratorinis darbas 3", weight: 10, grade: null },
-      { name: "Laboratorinis darbas 4", weight: 10, grade: null },
-      { name: "Egzaminas", weight: 60, grade: null },
-    ]
-  };
+const StudentSubjectDetailed = () => {
+  const { subjectId } = useParams();
+  const [subject, setSubject] = useState(null);
+  const [grades, setGrades] = useState([]);
+  const [subjectData, setSubjectData] = useState({ tasks: [] });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const calculateTotalGrade = () => {
-    let total = 0;
-    let totalWeight = 0;
-    subjectData.tasks.forEach(task => {
-      if (task.grade !== null) {
-        total += task.grade * task.weight;
-        totalWeight += task.weight;
+  useEffect(() => {
+    const fetchSubject = async () => {
+      try {
+        setLoading(true);
+        const response = await apiAuth(`/student/subject/${subjectId}`);
+        const data = await response.json();
+
+        setSubject(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
       }
-    });
-    return totalWeight > 0 ? (total / totalWeight).toFixed(2) : "N/A";
-  };
+    };
+
+    fetchSubject();
+  }, [subjectId]);
+
+  useEffect(() => {
+    const fetchGrades = async () => {
+      try {
+        if (subject && subject.grade_types) {
+          const gradeResponses = await Promise.all(
+            subject.grade_types.map(async (gradeType) => {
+              const response = await apiAuth(`/student/grade/${gradeType.id}`);
+              return await response.json();
+            })
+          );
+
+          setGrades(gradeResponses);
+        }
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    fetchGrades();
+  }, [subject]);
+
+  useEffect(() => {
+    if (subject && grades) {
+      const types = subject.grade_types || [];
+      const result = types.map((gradeType) => {
+        const matchedGrade = grades.find((grade) => grade.grade_type_id === gradeType.id);
+
+        return {
+          name: gradeType.name,
+          percentage: gradeType.percentage,
+          value: matchedGrade ? matchedGrade?.value : "-",
+        };
+      });
+
+      setSubjectData({ tasks: result });
+    }
+  }, [subject, grades]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="student-subject-detailed-container">
       <div className="student-subject-detailed-header">
-        <h1 className="student-subject-detailed-title">{subjectData.name}</h1>
-        <p className="student-subject-detailed-code">{subjectData.code}</p>
+        <h1 className="student-subject-detailed-title">{subject?.subject.name || "N/A"}</h1>
+        <p className="student-subject-detailed-code">{subject?.subject.id || "N/A"}</p>
       </div>
       <div className="student-subject-detailed-info">
-        <p>Kreditai: {subjectData.credits}</p>
-        <p>Valandos: {subjectData.hours}</p>
-        <p>Dėstytojas: {subjectData.lecturer}</p>
+        <p>Kreditai: 6</p>
+        <p>
+          Dėstytojas: {subject?.teacher_name[0] ? `${subject.teacher_name[0]}` : "N/A"}
+        </p>
       </div>
       <div className="student-subject-detailed-grades">
         <h2>Įvertinimai</h2>
@@ -54,22 +98,24 @@ const StudentSubjectDetailed = ({ subject }) => {
             </tr>
           </thead>
           <tbody>
-            {subjectData.tasks.map((task, index) => (
-              <tr key={index}>
-                <td>{task.name}</td>
-                <td>{task.weight}%</td>
-                <td>{task.grade !== null ? task.grade : '-'}</td>
+            {subjectData.tasks && subjectData.tasks.length > 0 ? (
+              subjectData.tasks.map((task, index) => (
+                <tr key={index}>
+                  <td>{task.name}</td>
+                  <td>{task.percentage}%</td>
+                  <td>{task.value !== null ? task.value : "-"}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3">No tasks available</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
-      </div>
-      <div className="student-subject-detailed-final-grade">
-        <p>Galutinis įvertinimas: {subjectData.finalGrade || calculateTotalGrade()}</p>
       </div>
     </div>
   );
 };
 
 export default StudentSubjectDetailed;
-

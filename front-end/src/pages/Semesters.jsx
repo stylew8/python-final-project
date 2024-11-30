@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import '../styles/semesters.css';
 import { apiAuth } from "../api";
+import StudentView from "./StudentView";
 
 export default function Semesters() {
-     const [semesters, setSemesters] = useState([]);
+     const [semesters, setSemesters] = useState([null]);
      const [loading, setLoading] = useState(true);
      const [error, setError] = useState(null);
 
@@ -35,15 +37,17 @@ export default function Semesters() {
           <main>
                <div className="container">
                     <section className="semester">
-                    {semesters.length === 0 ? (
+                    {!semesters||semesters.length === 0 ? (
                               <div>No available semesters</div>
                          ) : (
                               semesters.map((semester, index) => (
-                                   <a key={index} href="/semestersDetails">
+                                   <Link key={index} to={`/studentView/${semester.id}`}>
                                         <h1>{semester.name}</h1>
-                                        <p>{semester.start_date} - {semester.end_date}</p> 
-                                   </a>
-                              ))
+                                        <p>
+                                             {semester.start_date} - {semester.end_date}
+                                        </p>
+                                   </Link>
+                              ))??<div></div>
                          )}
                     </section>
                </div>

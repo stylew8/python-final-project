@@ -13,4 +13,4 @@ class AdminResponse(BaseModel):
     email: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
