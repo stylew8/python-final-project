@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import '../styles/studentView.css';
 import { apiAuth } from '../api';
 
-
 const SemesterTable = ( { semester_id, setSemesterName } ) => {
 
   const [subjectss, setSubjects] = useState([]);

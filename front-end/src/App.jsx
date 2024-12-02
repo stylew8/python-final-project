@@ -8,6 +8,9 @@ import Header from './pages/Header.jsx';
 import HeaderLoggedIn from './pages/HeaderLoggedIn.jsx';
 import LoginForm from './pages/LoginFrom.jsx';
 import Semesters from './pages/Semesters.jsx';
+import TeacherSubjects from "./pages/TeacherSubjects.jsx";
+import TeacherSubjectDetails from "./pages/TeacherSubjectDetails.jsx";
+import Admin from "./pages/Admin.jsx";
 import SemestersDetails from './pages/SemestersDetails.jsx';
 import StudentView from './pages/StudentView.jsx';
 import StudentSubjectDetailed from './pages/StudentSubjectDetailed.jsx';
@@ -46,6 +49,9 @@ function App() {
           element={isAuthenticated ? <Semesters /> : <Main />}
         />
         <Route path='/semestersDetails' element={<SemestersDetails />} />
+        <Route path='/admin' element={<Admin />} />
+        <Route path='/teacherSubjects' element={<TeacherSubjects />} />
+        <Route path='/teacherSubjectDetails' element={<TeacherSubjectDetails />} />
         <Route path='/studentView/:semesterId' element={<StudentView />} />
         <Route path="/studentSubjectDetailed/:subjectId" element={<StudentSubjectDetailed />} />
         <Route path='*' element={<NotFound404 />} />

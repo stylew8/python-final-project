@@ -11,16 +11,10 @@ function Header() {
         </button>
         <ul className='nav'>
           <li className='nav-item' >
-            <a className='nav-link' href="/semestersDetails">SemesterDetails</a>
+            <a className='nav-link' href="/teacherSubjects">TeacherSubjects</a>
           </li>
           <li className='nav-item' >
-            <a className='nav-link' href="/semesters">Semesters</a>
-          </li>
-          <li className='nav-item' >
-            <a className='nav-link' href="/studentView">StudentView</a>
-          </li>
-          <li className='nav-item' >
-            <a className='nav-link' href="/studentSubjectDetailed">StudentSubjectView</a>
+            <a className='nav-link' href="/admin">Admin</a>
           </li>
         </ul>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">

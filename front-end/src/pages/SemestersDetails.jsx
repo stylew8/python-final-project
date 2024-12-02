@@ -13,30 +13,8 @@ const SemestersDetails = () => {
     { id: 8, name: 'Grace Lee', major: 'Economics', semester: 3, grades: [87, 90, 88] },
     { id: 9, name: 'Henry Taylor', major: 'History', semester: 2, grades: [82, 78, 85] },
     { id: 10, name: 'Ivy Chen', major: 'Art', semester: 1, grades: [93, 95, 91] },
-    { id: 11, name: 'Jack Wilson', major: 'Computer Science', semester: 4, grades: [89, 92, 87] },
-    { id: 12, name: 'Karen Lopez', major: 'Mathematics', semester: 3, grades: [91, 88, 93] },
-    { id: 13, name: 'Leo Kim', major: 'Physics', semester: 2, grades: [84, 79, 86] },
-    { id: 14, name: 'Mia Patel', major: 'Chemistry', semester: 1, grades: [86, 90, 88] },
-    { id: 15, name: 'Nathan Brown', major: 'Biology', semester: 4, grades: [92, 87, 90] },
-    { id: 16, name: 'Olivia Davis', major: 'Psychology', semester: 3, grades: [88, 91, 89] },
-    { id: 17, name: 'Paul Johnson', major: 'Engineering', semester: 2, grades: [83, 85, 81] },
-    { id: 18, name: 'Quinn Smith', major: 'Economics', semester: 1, grades: [90, 92, 88] },
-    { id: 19, name: 'Rachel Lee', major: 'History', semester: 4, grades: [85, 83, 87] },
-    { id: 20, name: 'Samuel Chen', major: 'Art', semester: 3, grades: [94, 96, 92] },
-    { id: 21, name: 'Tina Martinez', major: 'Computer Science', semester: 2, grades: [87, 89, 85] },
-    { id: 22, name: 'Ulysses Brown', major: 'Mathematics', semester: 1, grades: [89, 91, 90] },
-    { id: 23, name: 'Victoria Kim', major: 'Physics', semester: 4, grades: [82, 84, 80] },
-    { id: 24, name: 'William Patel', major: 'Chemistry', semester: 3, grades: [88, 86, 90] },
-    { id: 25, name: 'Xena Davis', major: 'Biology', semester: 2, grades: [91, 93, 89] },
-    { id: 26, name: 'Yara Wilson', major: 'Psychology', semester: 1, grades: [86, 88, 84] },
-    { id: 27, name: 'Zack Johnson', major: 'Engineering', semester: 4, grades: [84, 82, 86] },
-    { id: 28, name: 'Amy Taylor', major: 'Economics', semester: 3, grades: [90, 88, 92] },
-    { id: 29, name: 'Ben Lee', major: 'History', semester: 2, grades: [83, 85, 81] },
-    { id: 30, name: 'Chloe Chen', major: 'Art', semester: 1, grades: [95, 97, 93] },
-    { id: 31, name: 'David Wilson', major: 'Computer Science', semester: 4, grades: [88, 90, 86] },
-    { id: 32, name: 'Emma Lopez', major: 'Mathematics', semester: 3, grades: [92, 90, 94] },
-    { id: 33, name: 'Felix Kim', major: 'Physics', semester: 2, grades: [85, 83, 87] }
   ]);
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [newGrade, setNewGrade] = useState('');
   const [selectedStudent, setSelectedStudent] = useState(null);
