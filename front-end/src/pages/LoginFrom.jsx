@@ -23,7 +23,19 @@ const LoginForm = ({ userType }) => {
                 const { access_token } = data;
                 localStorage.setItem("jwt", access_token); 
                 console.log("Login successful:", access_token);
-                window.location.href = "/";
+
+                if(userType == "admin"){
+                    window.location.href = "/admin";
+
+                }
+
+                if(userType=="teacher"){
+                    window.location.href = "/teacherSubjects"
+                }
+
+                if(userType = "student"){
+                    window.location.href = "/";
+                }
             } else {
                 setError("Neteisingas vardas arba slaptažodis");
             }
